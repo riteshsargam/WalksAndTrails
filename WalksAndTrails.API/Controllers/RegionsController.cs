@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WalksAndTrails.API.Data;
 using WalksAndTrails.API.Models.Domain;
+using WalksAndTrails.API.Models.DTO;
 
 namespace WalksAndTrails.API.Controllers
 {
@@ -22,9 +23,24 @@ namespace WalksAndTrails.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var regions = dbContext.Regions.ToList();
+            // Get Data From Database - Domain Models
+            var regionsDomain = dbContext.Regions.ToList();
 
-            return Ok(regions);
+            // Map Domain Models to DTOs
+            var regionsDto = new List<RegionDto>();
+            foreach (var regionDomain in regionsDomain)
+            {
+                regionsDto.Add(new RegionDto()
+                {
+                    Id = regionDomain.Id,
+                    Code = regionDomain.Code,
+                    Name = regionDomain.Name,
+                    RegionImageUrl = regionDomain.RegionImageUrl
+                });
+            }
+
+            // Return DTOs
+            return Ok(regionsDto);
         }
 
         // GET Region by ID
@@ -34,13 +50,24 @@ namespace WalksAndTrails.API.Controllers
         public IActionResult GetById([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.Find(id);
-
+            // Get Region Domain Model From Database
             var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
             if (region == null)
             {
                 return NotFound();
             }
+
+            // Map Region Domain Model to Region DTO
+            var regionDto = new RegionDto
+            {
+                Id = region.Id,
+                Code = region.Code,
+                Name = region.Name,
+                RegionImageUrl = region.RegionImageUrl
+            };
+
+            // Return DTO back to client
             return Ok(region);
         }
     }
