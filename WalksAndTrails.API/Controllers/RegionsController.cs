@@ -131,7 +131,36 @@ namespace WalksAndTrails.API.Controllers
                 RegionImageUrl = regionDomainModel.RegionImageUrl
             };
 
-            
+            return Ok(regionDto);
+        }
+
+        // DELETE Region
+        // DELETE: https://localhost:portnumber/api/regions/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            // Get Region Domain Model From Database
+            var regionDomainModel = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            if (regionDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Remove Region Domain Model from Database
+            dbContext.Regions.Remove(regionDomainModel);
+            dbContext.SaveChanges();
+
+            // Return Deleted Region back
+            // Map Domain Model to DTO
+            var regionDto = new RegionDto
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                RegionImageUrl = regionDomainModel.RegionImageUrl
+            };
+
             return Ok(regionDto);
         }
     }
