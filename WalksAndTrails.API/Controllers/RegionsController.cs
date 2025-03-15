@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WalksAndTrails.API.Data;
 using WalksAndTrails.API.Models.Domain;
 using WalksAndTrails.API.Models.DTO;
+using WalksAndTrails.API.Repositories;
 
 namespace WalksAndTrails.API.Controllers
 {
@@ -13,10 +14,12 @@ namespace WalksAndTrails.API.Controllers
     public class RegionsController : ControllerBase
     {
         private readonly WalksAndTrailsDbContext dbContext;
+        private readonly IRegionRepository regionRepository;
 
-        public RegionsController(WalksAndTrailsDbContext dbContext)
+        public RegionsController(WalksAndTrailsDbContext dbContext, IRegionRepository regionRepository)
         {
             this.dbContext = dbContext;
+            this.regionRepository = regionRepository;
         }
 
         // GET All Regions
@@ -25,7 +28,7 @@ namespace WalksAndTrails.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             // Get Data From Database - Domain Models
-            var regionsDomain = await dbContext.Regions.ToListAsync();
+            var regionsDomain = await regionRepository.GetAllAsyc();
 
             // Map Domain Models to DTOs
             var regionsDto = new List<RegionDto>();

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WalksAndTrails.API.Data;
+using WalksAndTrails.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<WalksAndTrailsDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("WalksAndTrailsConnectionString"));
 });
+
+builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 
 var app = builder.Build();
 
