@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WalksAndTrails.API.Data;
+using WalksAndTrails.API.Mappings;
 using WalksAndTrails.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<WalksAndTrailsDbContext>(options =>
 });
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
