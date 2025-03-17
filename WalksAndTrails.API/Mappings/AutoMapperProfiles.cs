@@ -4,7 +4,7 @@ using WalksAndTrails.API.Models.DTO;
 
 namespace WalksAndTrails.API.Mappings
 {
-    public class AutoMapperProfiles: Profile
+    public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles()
         {
