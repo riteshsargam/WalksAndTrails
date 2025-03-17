@@ -1,0 +1,10 @@
+﻿using WalksAndTrails.API.Models.Domain;
+
+namespace WalksAndTrails.API.Repositories
+{
+    public interface IWalkRepository
+    {
+        Task<Walk> CreateAsync(Walk walk);
+
+    }
+}
