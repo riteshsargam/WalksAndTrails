@@ -35,5 +35,16 @@ namespace WalksAndTrails.API.Controllers
             return Ok(mapper.Map<WalkDto>(walkDomainModel));
 
         }
+
+        // Get Walks
+        // GET: https://localhost:portnumber/api/walks
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var walksDomainModel = await walkRepository.GetAllAsync();
+
+            //Map Domain Model to DTO
+            return Ok(mapper.Map<List<WalkDto>>(walksDomainModel));
+        }
     }
 }
