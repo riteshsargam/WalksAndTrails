@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WalksAndTrails.API.Models.Domain;
 using WalksAndTrails.API.Models.DTO;
 using WalksAndTrails.API.Repositories;
@@ -81,6 +82,22 @@ namespace WalksAndTrails.API.Controllers
             
             // Map Domain Model to DTO
             return Ok(mapper.Map<WalkDto>(walkDomainModel));
+        }
+
+        // Delete Walk By Id
+        // DELETE: https://localhost:portnumber/api/walks/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deletedwalkDomainModel = await walkRepository.DeleteAsync(id);
+            if (deletedwalkDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            // Map Domain Model to DTO
+            return Ok(mapper.Map<WalkDto>(deletedwalkDomainModel));
         }
     }
 }
