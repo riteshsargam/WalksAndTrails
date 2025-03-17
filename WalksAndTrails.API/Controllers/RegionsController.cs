@@ -61,17 +61,25 @@ namespace WalksAndTrails.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
-            // Map Region DTO to Region Domain Model
-            var regionDomainModel = mapper.Map<Region>(addRegionRequestDto);
+            if (ModelState.IsValid)
+            {
+                // Map Region DTO to Region Domain Model
+                var regionDomainModel = mapper.Map<Region>(addRegionRequestDto);
 
-            // Add Region Domain Model to Database
-            regionDomainModel = await regionRepository.CreateAsync(regionDomainModel);
+                // Add Region Domain Model to Database
+                regionDomainModel = await regionRepository.CreateAsync(regionDomainModel);
 
-            //Map Domain Model to DTO
-            var regionDto = mapper.Map<RegionDto>(regionDomainModel);   
+                //Map Domain Model to DTO
+                var regionDto = mapper.Map<RegionDto>(regionDomainModel);
 
-            // Return Created Region DTO
-            return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
+                // Return Created Region DTO
+                return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+
         }
 
         // PUT To Update Region
@@ -80,18 +88,24 @@ namespace WalksAndTrails.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            
-            var regionDomainModel = mapper.Map<Region>(updateRegionRequestDto); 
-
-            // Get Region Domain Model From Database
-            regionDomainModel =  await regionRepository.UpdateAsync(id, regionDomainModel);
-
-            if (regionDomainModel == null)
+            if(ModelState.IsValid)
             {
-                return NotFound();
-            }
+                var regionDomainModel = mapper.Map<Region>(updateRegionRequestDto);
 
-            return Ok(mapper.Map<RegionDto>(regionDomainModel));
+                // Get Region Domain Model From Database
+                regionDomainModel = await regionRepository.UpdateAsync(id, regionDomainModel);
+
+                if (regionDomainModel == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(mapper.Map<RegionDto>(regionDomainModel));
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         // DELETE Region
