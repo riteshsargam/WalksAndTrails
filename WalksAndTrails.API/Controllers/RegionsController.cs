@@ -31,6 +31,7 @@ namespace WalksAndTrails.API.Controllers
         // GET All Regions
         // GET: https://localhost:portnumber/api/regions
         [HttpGet]
+
         public async Task<IActionResult> GetAll()
         {
             // Get Data From Database - Domain Models
