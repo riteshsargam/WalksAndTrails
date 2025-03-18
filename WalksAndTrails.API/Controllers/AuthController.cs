@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WalksAndTrails.API.Data;
+using WalksAndTrails.API.Models.DTO;
 
 namespace WalksAndTrails.API.Controllers
 {
@@ -52,6 +53,26 @@ namespace WalksAndTrails.API.Controllers
             return BadRequest(identityResult.Errors);
         }
 
+        // POST: / api/Auth/Login
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        {
+            var user = await userManager.FindByEmailAsync(loginRequestDto.UserName);
+
+            if (user != null)
+            {
+                var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+
+                if (checkPasswordResult)
+                {
+                    // Create Token
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Username or password incorrect");
+        }
     }
 }
 
