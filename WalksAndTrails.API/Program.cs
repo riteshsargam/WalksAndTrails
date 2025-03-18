@@ -20,6 +20,11 @@ builder.Services.AddDbContext<WalksAndTrailsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WalksAndTrailsConnectionString"));
 });
 
+builder.Services.AddDbContext<WalksAndTrailsAuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WalksAndTrailsAuthConnectionString"));
+});
+
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
 

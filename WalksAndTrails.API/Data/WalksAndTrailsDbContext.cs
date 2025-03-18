@@ -5,7 +5,7 @@ namespace WalksAndTrails.API.Data
 {
     public class WalksAndTrailsDbContext: DbContext
     {
-        public WalksAndTrailsDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public WalksAndTrailsDbContext(DbContextOptions<WalksAndTrailsDbContext> dbContextOptions) : base(dbContextOptions)
         {
 
         }
