@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using WalksAndTrails.API.CustomActionFilter;
 using WalksAndTrails.API.Data;
 using WalksAndTrails.API.Models.Domain;
@@ -14,31 +15,48 @@ namespace WalksAndTrails.API.Controllers
     // https://localhost:5001/api/regions
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly WalksAndTrailsDbContext dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
+        private readonly ILogger<RegionsController> logger;
 
-        public RegionsController(WalksAndTrailsDbContext dbContext, IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(WalksAndTrailsDbContext dbContext, IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger)
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         // GET All Regions
         // GET: https://localhost:portnumber/api/regions
         [HttpGet]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-            // Get Data From Database - Domain Models
-            var regionsDomain = await regionRepository.GetAllAsyc();
+            try
+            {
+                throw new Exception("This is a custom exception");
 
-            // Return DTOs
-            return Ok(mapper.Map<List<RegionDto>>(regionsDomain));
+                // Get Data From Database - Domain Models
+                var regionsDomain = await regionRepository.GetAllAsyc();
+
+                // Return DTOs
+
+                logger.LogInformation($"Finished GetAllRegions request with data: {JsonSerializer.Serialize(regionsDomain)}");
+
+                return Ok(mapper.Map<List<RegionDto>>(regionsDomain));
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                throw;
+            }
+            
         }
 
         // GET Region by ID
