@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WalksAndTrails.API.Data
+namespace WalksAndTrails.API.Models.DTO
 {
     public class RegisterRequestDto
     {

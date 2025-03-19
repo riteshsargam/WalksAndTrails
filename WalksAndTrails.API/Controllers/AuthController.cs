@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WalksAndTrails.API.Data;
 using WalksAndTrails.API.Models.DTO;
 using WalksAndTrails.API.Repositories;
 
