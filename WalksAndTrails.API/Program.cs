@@ -7,6 +7,7 @@ using WalksAndTrails.API.Data;
 using WalksAndTrails.API.Mappings;
 using WalksAndTrails.API.Repositories;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +106,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
+    // https://localhost:portnumber/images/image.jpg
+});
 
 app.MapControllers();
 
